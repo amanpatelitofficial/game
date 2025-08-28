@@ -2,477 +2,180 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>⚡ DevOps Crossword – 4 Teams</title>
+<title>⚡ DevOps Crossword – 4 Teams (10 Qs Each)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-  :root { --cols: 14; --cell: 32px; --bg:#0e0f12; --panel:#15171b; --ink:#f5f7fa; --muted:#23262d; --line:#323844; --accent:#00d084; --warn:#ff5252; --brand:#ff9800; --blue:#33b5ff; }
-  html,body{height:100%}
-  body{
-    margin:0; background:radial-gradient(80% 60% at 50% 30%, #14171c, #0c0d10);
-    color:var(--ink); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; text-align:center;
-  }
-  h1{
-    margin:18px 8px 10px; font-weight:900; letter-spacing:.3px;
-    color:var(--brand); text-shadow:0 0 16px rgba(255,152,0,.35);
-  }
-  /* Scorebar */
-  #scorebar{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:14px }
-  .chip{
-    background:#0f1116; border:1px solid #2a2f3a; color:#b9c2cf;
-    padding:8px 14px; border-radius:999px; font-weight:700; box-shadow:0 0 0 1px rgba(0,0,0,.2) inset;
-  }
-  .chip .n{ color:var(--blue) }
-
-  /* Layout */
-  .wrap{ width:100%; max-width:1280px; margin:0 auto 40px; padding:0 10px }
-  .grid4{
-    display:grid; grid-template-columns: repeat(2, minmax(280px, 1fr));
-    gap:26px; place-items:stretch;
-  }
-
-  .team{
-    background:var(--panel); border:1px solid #2a2f3a; border-radius:16px; padding:14px 14px 16px;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
-  }
-  .team header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px }
-  .team h2{ margin:0; font-size:20px; color:var(--blue); text-shadow:0 0 8px rgba(51,181,255,.35) }
-  .timer{ font-weight:800; color:var(--warn) }
-
-  /* Crossword board */
-  .board{
-    display:grid; grid-template-columns: repeat(var(--cols), var(--cell));
-    gap:2px; margin:10px auto; place-content:center;
-    background:#0e1015; border:1px solid var(--line); padding:8px; border-radius:12px;
-  }
-  .cell{
-    width:var(--cell); height:var(--cell);
-    display:flex; align-items:center; justify-content:center;
-    background:#1a1e25; color:#e9edf5; font-weight:900; letter-spacing:.5px;
-    border:1px solid #2a2f3a; border-radius:6px; user-select:none; cursor:pointer;
-    transition:transform .08s ease, background .15s ease;
-  }
-  .cell:hover{ transform:scale(1.06) }
-  .cell.preview{ background:#4b5563; color:#fff }
-  .cell.found{ background:var(--accent); color:#0b1116; border-color:#10b981; box-shadow:0 0 0 2px rgba(16,185,129,.25) inset }
-  .team.disabled .cell{ pointer-events:none; filter:saturate(.5) opacity(.55) }
-
-  /* Clues */
-  .clues{ text-align:left; margin-top:8px; display:grid; gap:6px }
-  .clue{
-    background:#0f1116; border:1px solid #2a2f3a; border-radius:8px; padding:8px 10px;
-    font-size:14px;
-  }
-  .clue.done{ color:var(--accent); text-decoration:line-through }
-
-  /* Footer buttons */
-  .bar{ margin:16px 0 6px }
-  button{
-    cursor:pointer; background:#1b88f4; color:#fff; border:0; border-radius:10px; padding:10px 14px; font-weight:800;
-    box-shadow:0 6px 18px rgba(27,136,244,.25); transition:transform .05s ease, filter .2s ease;
-  }
-  button:hover{ filter:brightness(1.08) } button:active{ transform:translateY(1px) }
-
-  /* Winner modal */
-  #final{
-    position:fixed; inset:0; display:none; align-items:center; justify-content:center; backdrop-filter: blur(6px);
-    background:rgba(6,7,10,.55);
-  }
-  .card{
-    background:#0f1116; border:1px solid #2a2f3a; border-radius:16px; padding:20px 22px; width:min(560px, 92%);
-    box-shadow:0 20px 50px rgba(0,0,0,.5); text-align:left;
-  }
-  .card h3{ margin:0 0 8px; color:#ffd54f; text-align:center }
-  .r{ display:grid; grid-template-columns:1fr auto; gap:8px; padding:8px 10px; border-radius:8px; background:#141821; margin-top:8px }
-  .rank{ font-weight:900 } .pts{ font-weight:900; color:#9adfff }
+:root { --cols: 14; --cell: 32px; --bg:#0e0f12; --panel:#15171b; --ink:#f5f7fa; --muted:#23262d; --line:#323844; --accent:#00d084; --warn:#ff5252; --brand:#ff9800; --blue:#33b5ff; }
+html,body{height:100%}
+body{ margin:0; background:radial-gradient(80% 60% at 50% 30%, #14171c, #0c0d10); color:var(--ink); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; text-align:center; }
+h1{ margin:18px 8px 10px; font-weight:900; letter-spacing:.3px; color:var(--brand); text-shadow:0 0 16px rgba(255,152,0,.35);}
+#scorebar{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:14px }
+.chip{ background:#0f1116; border:1px solid #2a2f3a; color:#b9c2cf; padding:8px 14px; border-radius:999px; font-weight:700; }
+.chip .n{ color:var(--blue) }
+.wrap{ width:100%; max-width:1280px; margin:0 auto 40px; padding:0 10px }
+.team{ background:var(--panel); border:1px solid #2a2f3a; border-radius:16px; padding:14px; }
+.team header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px }
+.team h2{ margin:0; font-size:20px; color:var(--blue); }
+.timer{ font-weight:800; color:var(--warn) }
+.board{ display:grid; grid-template-columns: repeat(var(--cols), var(--cell)); gap:2px; margin:10px auto; place-content:center; background:#0e1015; border:1px solid var(--line); padding:8px; border-radius:12px; }
+.cell{ width:var(--cell); height:var(--cell); display:flex; align-items:center; justify-content:center; background:#1a1e25; color:#e9edf5; font-weight:900; border:1px solid #2a2f3a; border-radius:6px; user-select:none; cursor:pointer; }
+.cell.preview{ background:#4b5563; color:#fff }
+.cell.found{ background:var(--accent); color:#0b1116; }
+.clues{ text-align:left; margin-top:8px; display:grid; gap:6px }
+.clue{ background:#0f1116; border:1px solid #2a2f3a; border-radius:8px; padding:8px 10px; font-size:14px; }
+.clue.done{ color:var(--accent); text-decoration:line-through }
+.bar{ margin:16px 0 6px }
+button{ cursor:pointer; background:#1b88f4; color:#fff; border:0; border-radius:10px; padding:10px 14px; font-weight:800; }
+#final{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; backdrop-filter: blur(6px); background:rgba(6,7,10,.55);}
+.card{ background:#0f1116; border:1px solid #2a2f3a; border-radius:16px; padding:20px 22px; width:min(560px, 92%); text-align:left;}
+.card h3{ margin:0 0 8px; color:#ffd54f; text-align:center }
+.r{ display:grid; grid-template-columns:1fr auto; gap:8px; padding:8px 10px; border-radius:8px; background:#141821; margin-top:8px }
+.rank{ font-weight:900 } .pts{ font-weight:900; color:#9adfff }
+#loginScreen{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#0e0f12; }
+#loginBox{ background:#15171b; padding:24px; border-radius:16px; border:1px solid #2a2f3a; width:300px; }
+#loginBox h2{ margin:0 0 12px; color:var(--blue); }
+select,button{ margin-top:10px; width:100%; padding:10px; border-radius:8px; border:0; }
 </style>
 </head>
 <body>
-  <h1>⚡ DevOps Crossword Game</h1>
+<h1>⚡ DevOps Crossword Game</h1>
 
-  <div id="scorebar">
-    <div class="chip">Team 1: <span class="n" id="s1">0</span></div>
-    <div class="chip">Team 2: <span class="n" id="s2">0</span></div>
-    <div class="chip">Team 3: <span class="n" id="s3">0</span></div>
-    <div class="chip">Team 4: <span class="n" id="s4">0</span></div>
+<div id="scorebar">
+  <div class="chip">Team 1: <span class="n" id="s1">0</span></div>
+  <div class="chip">Team 2: <span class="n" id="s2">0</span></div>
+  <div class="chip">Team 3: <span class="n" id="s3">0</span></div>
+  <div class="chip">Team 4: <span class="n" id="s4">0</span></div>
+</div>
+
+<div class="wrap">
+  <div id="gameArea"></div>
+  <div class="bar">
+    <button id="finishNow" style="display:none">🏁 Finish Now</button>
   </div>
+</div>
 
-  <div class="wrap">
-    <div class="grid4" id="boards"></div>
-    <div class="bar">
-      <button id="finishNow">🏁 Finish Now</button>
+<div id="loginScreen">
+  <div id="loginBox">
+    <h2>Login to Play</h2>
+    <select id="teamSelect">
+      <option value="">Select Team</option>
+      <option value="0">Team 1</option>
+      <option value="1">Team 2</option>
+      <option value="2">Team 3</option>
+      <option value="3">Team 4</option>
+    </select>
+    <button id="startBtn">Start Game</button>
+  </div>
+</div>
+
+<div id="final">
+  <div class="card">
+    <h3>🏆 Final Leaderboard</h3>
+    <div id="leader"></div>
+    <div style="text-align:center;margin-top:12px">
+      <button onclick="document.getElementById('final').style.display='none'">Close</button>
     </div>
   </div>
-
-  <!-- Winner modal -->
-  <div id="final">
-    <div class="card">
-      <h3>🏆 Final Leaderboard</h3>
-      <div id="leader"></div>
-      <div style="text-align:center;margin-top:12px">
-        <button onclick="document.getElementById('final').style.display='none'">Close</button>
-      </div>
-    </div>
-  </div>
+</div>
 
 <script>
-/* ----------------------------
-   CONFIG
----------------------------- */
-const gridSize = 14;                  // 14 so long words like CLOUDFORMATION fit
+/* CONFIG */
+const gridSize = 14;
 const perWordPoints = 10;
-const roundSeconds = 7 * 60;          // 7 minutes each team
+const roundSeconds = 5*60; // 5 min per team
+let currentTeam = null;
 
 const TEAMS = [
-  {
-    name: "Team 1",
-    words: [
-      {w:"JENKINS", q:"CI/CD automation tool?"},
-      {w:"DOCKER", q:"Container runtime tool?"},
-      {w:"ANSIBLE", q:"Popular config mgmt tool?"},
-      {w:"PROMETHEUS", q:"Monitoring system?"},
-      {w:"KUBERNETES", q:"Container orchestration tool?"},
-      {w:"GRAFANA", q:"Visualization dashboard?"},
-      {w:"NAGIOS", q:"Legacy monitoring tool?"},
-      {w:"ARGOCD", q:"GitOps tool?"},
-      {w:"ELK", q:"Log management stack?"},
-      {w:"HELM", q:"Kubernetes package manager?"}
-    ]
-  },
-  {
-    name: "Team 2",
-    words: [
-      {w:"GIT", q:"Version control system?"},
-      {w:"TERRAFORM", q:"IaC tool by HashiCorp?"},
-      {w:"CIRCLECI", q:"Another CI/CD tool?"},
-      {w:"CHEF", q:"Ruby-based config mgmt tool?"},
-      {w:"PUPPET", q:"Declarative config mgmt tool?"},
-      {w:"SPINNAKER", q:"Multi-cloud CD platform?"},
-      {w:"NEWRELIC", q:"APM tool?"},
-      {w:"DATADOG", q:"Cloud monitoring service?"},
-      {w:"FLUENTD", q:"Log forwarding agent?"},
-      {w:"SALTSTACK", q:"Python-based config mgmt tool?"}
-    ]
-  },
-  {
-    name: "Team 3",
-    words: [
-      {w:"TERRAFORM", q:"Infrastructure as Code tool by HashiCorp?"},
-      {w:"HELM", q:"Kubernetes package manager?"},
-      {w:"NAGIOS", q:"Legacy monitoring/alerting system?"},
-      {w:"ISTIO", q:"Service mesh for Kubernetes?"},
-      {w:"SPINNAKER", q:"Continuous delivery multi-cloud platform?"},
-      {w:"CHEF", q:"Ruby-based config management tool?"},
-      {w:"PUPPET", q:"Declarative config management tool?"},
-      {w:"PROMETHEUS", q:"Open-source monitoring tool?"},
-      {w:"DATADOG", q:"Observability stack vendor?"},
-      {w:"LOGSTASH", q:"Log processing pipeline tool?"}
-    ]
-  },
-  {
-    name: "Team 4",
-    words: [
-      {w:"CLOUDFORMATION", q:"AWS IaC service?"},
-      {w:"EKS", q:"AWS managed Kubernetes service?"},
-      {w:"CLOUDWATCH", q:"AWS monitoring/logging service?"},
-      {w:"LAMBDA", q:"AWS serverless compute?"},
-      {w:"ATHENA", q:"Query service for S3 data?"},
-      {w:"STEPFUNCTIONS", q:"Serverless workflow orchestrator?"},
-      {w:"SNS", q:"AWS pub/sub messaging service?"},
-      {w:"SQS", q:"AWS message queue service?"},
-      {w:"CODEPIPELINE", q:"AWS CI/CD service?"},
-      {w:"CODEBUILD", q:"AWS build service?"}
-    ]
-  }
+  { name:"Team 1", words:[
+    {w:"JENKINS",q:"CI/CD automation tool?"},{w:"DOCKER",q:"Container runtime?"},{w:"ANSIBLE",q:"Config management?"},
+    {w:"PROMETHEUS",q:"Monitoring system?"},{w:"KUBERNETES",q:"Container orchestration?"},{w:"GRAFANA",q:"Visualization dashboard?"},
+    {w:"NAGIOS",q:"Legacy monitoring tool?"},{w:"ARGOCD",q:"GitOps tool?"},{w:"ELK",q:"Log management stack?"},{w:"HELM",q:"Kubernetes package manager?"}
+  ]},
+  { name:"Team 2", words:[
+    {w:"GIT",q:"Version control system?"},{w:"TERRAFORM",q:"IaC tool?"},{w:"CIRCLECI",q:"CI/CD tool?"},
+    {w:"CHEF",q:"Ruby config mgmt tool?"},{w:"PUPPET",q:"Declarative config mgmt?"},{w:"SPINNAKER",q:"Multi-cloud CD?"},
+    {w:"NEWRELIC",q:"APM tool?"},{w:"DATADOG",q:"Cloud monitoring?"},{w:"FLUENTD",q:"Log forwarding agent?"},{w:"SALTSTACK",q:"Python config mgmt?"}
+  ]},
+  { name:"Team 3", words:[
+    {w:"TERRAFORM",q:"IaC HashiCorp tool?"},{w:"HELM",q:"K8s package manager?"},{w:"NAGIOS",q:"Legacy monitoring?"},
+    {w:"ISTIO",q:"Service mesh?"},{w:"SPINNAKER",q:"CD multi-cloud?"},{w:"CHEF",q:"Ruby config tool?"},
+    {w:"PUPPET",q:"Declarative config tool?"},{w:"PROMETHEUS",q:"Open-source monitoring?"},{w:"DATADOG",q:"Observability vendor?"},{w:"LOGSTASH",q:"Log processing pipeline?"}
+  ]},
+  { name:"Team 4", words:[
+    {w:"CLOUDFORMATION",q:"AWS IaC service?"},{w:"EKS",q:"AWS managed Kubernetes?"},{w:"CLOUDWATCH",q:"AWS monitoring/logging?"},
+    {w:"LAMBDA",q:"AWS serverless compute?"},{w:"ATHENA",q:"Query S3 data?"},{w:"STEPFUNCTIONS",q:"Serverless workflow?"},
+    {w:"SNS",q:"AWS pub/sub messaging?"},{w:"SQS",q:"AWS message queue?"},{w:"CODEPIPELINE",q:"AWS CI/CD service?"},{w:"CODEBUILD",q:"AWS build service?"}
+  ]}
 ];
 
-/* ----------------------------
-   STATE
----------------------------- */
-const states = TEAMS.map(() => ({
-  grid: null,
-  found: new Set(),
-  preview: [],
-  dragging: false,
-  start: null,
-  over: false,
-  score: 0,
-  timerId: null,
-  secs: roundSeconds
-}));
+const states = TEAMS.map(()=>({grid:null,found:new Set(),preview:[],dragging:false,start:null,over:false,score:0,timerId:null,secs:roundSeconds}));
 
-/* ----------------------------
-   GRID GENERATION
----------------------------- */
-function emptyGrid() {
-  return Array.from({length: gridSize}, () => Array(gridSize).fill(''));
+/* GRID FUNCTIONS */
+function emptyGrid(){ return Array.from({length:gridSize},()=>Array(gridSize).fill('')); }
+function rand(a){ return a[Math.floor(Math.random()*a.length)]; }
+function fitsAt(grid,word,r,c,dir){
+  const L=word.length;
+  if(dir==='H'){ if(c+L>gridSize) return false; for(let k=0;k<L;k++) if(grid[r][c+k]!==''&&grid[r][c+k]!==word[k]) return false; return true; }
+  else{ if(r+L>gridSize) return false; for(let k=0;k<L;k++) if(grid[r+k][c]!==''&&grid[r+k][c]!==word[k]) return false; return true; }
+}
+function placeWord(grid,W){ const word=W.toUpperCase(); const options=[]; for(let r=0;r<gridSize;r++){ for(let c=0;c<gridSize;c++){ if(fitsAt(grid,word,r,c,'H')) options.push({r,c,dir:'H'}); if(fitsAt(grid,word,r,c,'V')) options.push({r,c,dir:'V'}); } } if(!options.length) return false; const pos=rand(options); if(pos.dir==='H') for(let k=0;k<word.length;k++) grid[pos.r][pos.c+k]=word[k]; else for(let k=0;k<word.length;k++) grid[pos.r+k][pos.c]=word[k]; return true; }
+function buildGrid(words){ for(let attempt=0;attempt<40;attempt++){ const grid=emptyGrid(); let ok=true; [...words].sort((a,b)=>b.w.length-a.w.length).forEach(({w})=>{ if(ok&&!placeWord(grid,w)) ok=false; }); if(!ok) continue; for(let r=0;r<gridSize;r++) for(let c=0;c<gridSize;c++) if(grid[r][c]==='') grid[r][c]=String.fromCharCode(65+Math.floor(Math.random()*26)); return grid; } const g=emptyGrid(); for(let r=0;r<gridSize;r++)for(let c=0;c<gridSize;c++) g[r][c]='X'; return g; }
+
+/* RENDER TEAM */
+const gameArea=document.getElementById('gameArea');
+function renderTeam(ti){
+  const st=states[ti];
+  gameArea.innerHTML='';
+  const grid=buildGrid(TEAMS[ti].words); st.grid=grid;
+  const panel=document.createElement('section'); panel.className='team'; panel.dataset.team=ti;
+  panel.innerHTML=`<header><h2>${TEAMS[ti].name}</h2><div class="timer" id="t${ti}">${Math.floor(roundSeconds/60).toString().padStart(2,'0')}:00</div></header>`;
+  const board=document.createElement('div'); board.className='board'; board.style.setProperty('--cols',gridSize);
+  grid.forEach((row,r)=>{ row.forEach((ch,c)=>{ const cell=document.createElement('div'); cell.className='cell'; cell.textContent=ch; cell.dataset.r=r; cell.dataset.c=c; cell.dataset.team=ti; board.appendChild(cell); }); });
+  panel.appendChild(board);
+  const clues=document.createElement('div'); clues.className='clues';
+  TEAMS[ti].words.forEach((o,i)=>{ const d=document.createElement('div'); d.className='clue'; d.id=`q${ti}-${i}`; d.textContent=`${i+1}. ${o.q}`; clues.appendChild(d); });
+  panel.appendChild(clues);
+  gameArea.appendChild(panel);
+  hookBoardEvents(board,ti);
+  document.getElementById('finishNow').style.display='inline-block';
+  startTimer(ti);
 }
 
-function rand(a){ return a[Math.floor(Math.random()*a.length)] }
+/* SELECTION */
+function pathBetween(r1,c1,r2,c2){ const cells=[]; if(r1===r2){ const s=Math.min(c1,c2),e=Math.max(c1,c2); for(let c=s;c<=e;c++) cells.push([r1,c]); } else if(c1===c2){ const s=Math.min(r1,r2),e=Math.max(r1,r2); for(let r=s;r<=e;r++) cells.push([r,c1]); } return cells; }
+function textFromPath(grid,path){ return path.map(([r,c])=>grid[r][c]).join(''); }
+function clearPreview(ti){ states[ti].preview.forEach(([r,c])=>{ const el=document.querySelector(`.cell[data-team="${ti}"][data-r="${r}"][data-c="${c}"]`); if(el&&!el.classList.contains('found')) el.classList.remove('preview'); }); states[ti].preview=[]; }
+function applyPreview(ti,path){ clearPreview(ti); states[ti].preview=path; path.forEach(([r,c])=>{ const el=document.querySelector(`.cell[data-team="${ti}"][data-r="${r}"][data-c="${c}"]`); if(el&&!el.classList.contains('found')) el.classList.add('preview'); }); }
+function lockFound(ti,path){ path.forEach(([r,c])=>{ const el=document.querySelector(`.cell[data-team="${ti}"][data-r="${r}"][data-c="${c}"]`); if(el){el.classList.remove('preview'); el.classList.add('found');} }); }
+function checkSelection(ti){ const st=states[ti]; const path=st.preview; if(!path.length) return; const word=textFromPath(st.grid,path); const rev=word.split('').reverse().join(''); const words=TEAMS[ti].words.map(o=>o.w); let idx=words.findIndex(w=>w===word||w===rev); if(idx!==-1&&!st.found.has(words[idx])){ st.found.add(words[idx]); lockFound(ti,path); st.score+=perWordPoints; updateScoreUI(); document.getElementById(`q${ti}-${idx}`).classList.add('done'); } clearPreview(ti); }
+function hookBoardEvents(board,ti){ const st=states[ti]; board.addEventListener('mousedown',e=>{ if(st.over) return; const cell=e.target.closest('.cell'); if(!cell) return; st.dragging=true; st.start=[Number(cell.dataset.r),Number(cell.dataset.c)]; applyPreview(ti,[st.start]); }); board.addEventListener('mouseover',e=>{ if(!st.dragging) return; const cell=e.target.closest('.cell'); if(!cell) return; const r2=Number(cell.dataset.r),c2=Number(cell.dataset.c); const [r1,c1]=st.start; const path=pathBetween(r1,c1,r2,c2); applyPreview(ti,path); }); window.addEventListener('mouseup',()=>{ if(!st.dragging) return; st.dragging=false; checkSelection(ti); }); }
 
-function fitsAt(grid, word, r, c, dir){
-  const L = word.length;
-  if (dir==='H'){
-    if (c + L > gridSize) return false;
-    for(let k=0;k<L;k++){
-      const v = grid[r][c+k];
-      if (v!=='' && v!==word[k]) return false;
-    }
-    return true;
-  } else {
-    if (r + L > gridSize) return false;
-    for(let k=0;k<L;k++){
-      const v = grid[r+k][c];
-      if (v!=='' && v!==word[k]) return false;
-    }
-    return true;
-  }
-}
+/* SCORE/TIMER */
+function updateScoreUI(){ states.forEach((s,i)=>document.getElementById(`s${i+1}`).textContent=s.score); }
+function startTimer(ti){ const st=states[ti]; const el=document.getElementById(`t${ti}`); const tick=()=>{ const m=String(Math.floor(st.secs/60)).padStart(2,'0'); const s=String(st.secs%60).padStart(2,'0'); el.textContent=`${m}:${s}`; if(st.secs<=0){ clearInterval(st.timerId); st.over=true; alert(`${TEAMS[ti].name} time over!`); document.getElementById('loginScreen').style.display='flex'; document.getElementById('finishNow').style.display='none'; } st.secs--; }; tick(); st.timerId=setInterval(tick,1000); }
 
-function placeWord(grid, W){
-  // gather all possible fits (allow overlaps if letters match)
-  const word = W.toUpperCase();
-  const options=[];
-  for(let r=0;r<gridSize;r++){
-    for(let c=0;c<gridSize;c++){
-      if (fitsAt(grid, word, r, c, 'H')) options.push({r,c,dir:'H'});
-      if (fitsAt(grid, word, r, c, 'V')) options.push({r,c,dir:'V'});
-    }
-  }
-  if (!options.length) return false;
-  const pos = rand(options);
-  if (pos.dir==='H') for(let k=0;k<word.length;k++) grid[pos.r][pos.c+k]=word[k];
-  else for(let k=0;k<word.length;k++) grid[pos.r+k][pos.c]=word[k];
-  return true;
-}
-
-function buildGrid(words){
-  for(let attempt=0; attempt<40; attempt++){
-    const grid = emptyGrid();
-    let ok=true;
-    // place longer words first for better success rate
-    [...words].sort((a,b)=>b.w.length-a.w.length).forEach(({w})=>{
-      if (ok && !placeWord(grid, w)) ok=false;
-    });
-    if (!ok) continue;
-    // fill empties with random letters
-    for(let r=0;r<gridSize;r++)
-      for(let c=0;c<gridSize;c++)
-        if(grid[r][c]==='') grid[r][c] = String.fromCharCode(65 + Math.floor(Math.random()*26));
-    return grid;
-  }
-  // fallback – should be extremely rare
-  const g=emptyGrid(); for(let r=0;r<gridSize;r++)for(let c=0;c<gridSize;c++) g[r][c]='X'; return g;
-}
-
-/* ----------------------------
-   RENDER
----------------------------- */
-const boardsWrap = document.getElementById('boards');
-
-function render(){
-  boardsWrap.innerHTML='';
-  TEAMS.forEach((team, ti)=>{
-    // build grid
-    const grid = buildGrid(team.words);
-    states[ti].grid = grid;
-
-    // panel
-    const panel = document.createElement('section');
-    panel.className='team';
-    panel.dataset.team = ti;
-
-    panel.innerHTML = `
-      <header>
-        <h2>${team.name}</h2>
-        <div class="timer" id="t${ti}">07:00</div>
-      </header>
-    `;
-
-    // board
-    const board = document.createElement('div');
-    board.className = 'board';
-    board.style.setProperty('--cols', gridSize);
-    grid.forEach((row,r)=>{
-      row.forEach((ch,c)=>{
-        const cell = document.createElement('div');
-        cell.className = 'cell';
-        cell.textContent = ch;
-        cell.dataset.r = r; cell.dataset.c = c; cell.dataset.team = ti;
-        board.appendChild(cell);
-      });
-    });
-    panel.appendChild(board);
-
-    // clues
-    const clues = document.createElement('div');
-    clues.className='clues';
-    team.words.forEach((o,i)=>{
-      const d = document.createElement('div');
-      d.className='clue'; d.id = `q${ti}-${i}`;
-      d.textContent = `${i+1}. ${o.q}`;
-      clues.appendChild(d);
-    });
-    panel.appendChild(clues);
-
-    boardsWrap.appendChild(panel);
-
-    hookBoardEvents(board, ti);
-    startTimer(ti);
-  });
-  updateScoreUI();
-}
-
-/* ----------------------------
-   SELECTION / CHECKING
----------------------------- */
-function pathBetween(r1,c1,r2,c2){
-  const cells=[];
-  if (r1===r2){
-    const s = Math.min(c1,c2), e=Math.max(c1,c2);
-    for(let c=s;c<=e;c++) cells.push([r1,c]);
-  } else if (c1===c2){
-    const s = Math.min(r1,r2), e=Math.max(r1,r2);
-    for(let r=s;r<=e;r++) cells.push([r,c1]);
-  }
-  return cells;
-}
-
-function textFromPath(grid, path){
-  return path.map(([r,c])=>grid[r][c]).join('');
-}
-
-function clearPreview(ti){
-  states[ti].preview.forEach(([r,c])=>{
-    const el = document.querySelector(`.cell[data-team="${ti}"][data-r="${r}"][data-c="${c}"]`);
-    if (el && !el.classList.contains('found')) el.classList.remove('preview');
-  });
-  states[ti].preview = [];
-}
-
-function applyPreview(ti, path){
-  clearPreview(ti);
-  states[ti].preview = path;
-  path.forEach(([r,c])=>{
-    const el = document.querySelector(`.cell[data-team="${ti}"][data-r="${r}"][data-c="${c}"]`);
-    if (el && !el.classList.contains('found')) el.classList.add('preview');
-  });
-}
-
-function lockFound(ti, path){
-  path.forEach(([r,c])=>{
-    const el = document.querySelector(`.cell[data-team="${ti}"][data-r="${r}"][data-c="${c}"]`);
-    if (el){ el.classList.remove('preview'); el.classList.add('found'); }
-  });
-}
-
-function checkSelection(ti){
-  const st = states[ti];
-  const path = st.preview;
-  if (!path.length) return;
-
-  const word = textFromPath(st.grid, path);
-  const rev  = word.split('').reverse().join('');
-  const words = TEAMS[ti].words.map(o=>o.w);
-  let idx = words.findIndex(w=>w===word || w===rev);
-
-  if (idx!==-1 && !st.found.has(words[idx])){
-    st.found.add(words[idx]);
-    lockFound(ti, path);
-    // score
-    st.score += perWordPoints;
-    updateScoreUI();
-    // strike clue
-    document.getElementById(`q${ti}-${idx}`).classList.add('done');
-  }
-
-  clearPreview(ti);
-}
-
-function hookBoardEvents(board, ti){
-  const st = states[ti];
-
-  board.addEventListener('mousedown', (e)=>{
-    if (st.over) return;
-    const cell = e.target.closest('.cell'); if (!cell) return;
-    st.dragging = true;
-    st.start = [Number(cell.dataset.r), Number(cell.dataset.c)];
-    applyPreview(ti, [st.start]);
-  });
-
-  board.addEventListener('mouseenter', ()=>{}, true);
-
-  board.addEventListener('mouseover', (e)=>{
-    if (!st.dragging) return;
-    const cell = e.target.closest('.cell'); if (!cell) return;
-    const r2 = Number(cell.dataset.r), c2 = Number(cell.dataset.c);
-    const [r1,c1] = st.start;
-    const path = pathBetween(r1,c1,r2,c2);
-    applyPreview(ti, path);
-  });
-
-  // finalize on mouseup anywhere
-  window.addEventListener('mouseup', ()=>{
-    if (!st.dragging) return;
-    st.dragging = false;
-    checkSelection(ti);
-  });
-}
-
-/* ----------------------------
-   SCORE / TIMER / END
----------------------------- */
-function updateScoreUI(){
-  document.getElementById('s1').textContent = states[0].score;
-  document.getElementById('s2').textContent = states[1].score;
-  document.getElementById('s3').textContent = states[2].score;
-  document.getElementById('s4').textContent = states[3].score;
-}
-
-function startTimer(ti){
-  const st = states[ti];
-  const el = document.getElementById(`t${ti}`);
-  const tick = ()=>{
-    const m = String(Math.floor(st.secs/60)).padStart(2,'0');
-    const s = String(st.secs%60).padStart(2,'0');
-    el.textContent = `${m}:${s}`;
-    if (st.secs<=0){
-      clearInterval(st.timerId);
-      st.over = true;
-      document.querySelector(`.team[data-team="${ti}"]`).classList.add('disabled');
-      maybeShowFinal();
-      return;
-    }
-    st.secs--;
-  };
-  tick();
-  st.timerId = setInterval(tick, 1000);
-}
-
-function allOver(){ return states.every(s=>s.over); }
-
-function maybeShowFinal(){
-  if (!allOver()) return;
-  // build leaderboard
-  const order = states.map((s,i)=>({name:TEAMS[i].name, score:s.score}))
-                      .sort((a,b)=>b.score-a.score);
-  const top = order[0].score;
-  const winners = order.filter(x=>x.score===top).map(x=>x.name).join(', ');
-  const leader = document.getElementById('leader');
-  leader.innerHTML = `<div class="r"><div class="rank">Winner: ${winners}</div><div class="pts">${top} pts</div></div>` +
-    order.map((o,i)=>`<div class="r"><div class="rank">${i+1}. ${o.name}</div><div class="pts">${o.score} pts</div></div>`).join('');
+function showFinal(){
+  const order=states.map((s,i)=>({name:TEAMS[i].name,score:s.score})).sort((a,b)=>b.score-a.score);
+  const top=order[0].score;
+  const winners=order.filter(x=>x.score===top).map(x=>x.name).join(', ');
+  const leader=document.getElementById('leader');
+  leader.innerHTML=`<div class="r"><div class="rank">Winner: ${winners}</div><div class="pts">${top} pts</div></div>`+order.map((o,i)=>`<div class="r"><div class="rank">${i+1}. ${o.name}</div><div class="pts">${o.score} pts</div></div>`).join('');
   document.getElementById('final').style.display='flex';
 }
 
-document.getElementById('finishNow').addEventListener('click', ()=>{
-  // stop all timers and mark over
+/* BUTTONS */
+document.getElementById('finishNow').addEventListener('click',()=>{
   states.forEach(s=>{ if(s.timerId) clearInterval(s.timerId); s.over=true; });
-  maybeShowFinal();
+  showFinal();
 });
 
-/* ----------------------------
-   BOOT
----------------------------- */
-render();
+document.getElementById('startBtn').addEventListener('click',()=>{
+  const sel=document.getElementById('teamSelect').value;
+  if(sel==="") return alert("Select a team!"); currentTeam=parseInt(sel);
+  if(states[currentTeam].over) return alert("Team already played!");
+  document.getElementById('loginScreen').style.display='none'; 
+  renderTeam(currentTeam);
+});
 </script>
 </body>
 </html>
