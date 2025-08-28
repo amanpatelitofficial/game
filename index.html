@@ -1,371 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>DevOps Crossword – 4 Teams (Turn-Based)</title>
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="UTF-8">
+<title>DevOps Crossword Game - 4 Teams</title>
 <style>
-  :root{
-    --bg:#121212; --fg:#f5f5f5; --muted:#1f1f1f; --line:#444; --accent:#28a745; --border:#777; --active:#ffd54f;
+  body {
+    background: linear-gradient(135deg, #0d0d0d, #1e1e1e);
+    color: #f5f5f5;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    padding: 20px;
   }
-  html,body{height:100%}
-  body{
-    margin:0; background:var(--bg); color:var(--fg); font-family:Arial,Helvetica,sans-serif; text-align:center;
-    display:flex; flex-direction:column; align-items:center;
+  h1 {
+    color: #ff9800;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px #ff9800;
   }
-  h1{margin:16px 8px}
-  .topbar{display:flex; gap:16px; flex-wrap:wrap; align-items:center; justify-content:center; margin-bottom:8px}
-  .badge{background:var(--muted); border:1px solid #333; border-radius:999px; padding:6px 12px; font-weight:bold}
-  button{
-    cursor:pointer; background:#007bff; color:white; border:none; border-radius:8px; padding:10px 14px; font-weight:bold;
+  #scoreboard {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 25px;
   }
-  button:hover{ background:#0056b3 }
-  /* Layout: keep everything centered */
-  .boards{
-    width:100%; max-width:1200px; margin:12px auto 24px;
-    display:grid; grid-template-columns: repeat(2, minmax(280px, 1fr)); gap:18px; place-items:center;
+  .score {
+    background: #1c1c1c;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: bold;
+    box-shadow: 0 0 12px rgba(0,0,0,0.6);
+    transition: transform 0.2s;
   }
-  .team{
-    width:100%; max-width:520px;
-    border:2px solid var(--border); border-radius:12px; padding:10px 12px; background:#0f0f0f;
-    transition: box-shadow .2s ease, border-color .2s ease, opacity .2s ease;
+  .score:hover { transform: scale(1.05); }
+  .score span {
+    color: #03a9f4;
   }
-  .team h2{margin:8px 0 10px}
-  .team.disabled{opacity:.55; pointer-events:none; filter:saturate(.6)}
-  .team.active{ border-color:var(--active); box-shadow:0 0 18px 0 var(--active) }
-  .crossword{
-    display:grid; grid-template-columns: repeat(12, 32px);
-    gap:0; margin:10px auto; padding:10px;
-    border:3px solid #555; border-radius:10px; background:#101010;
-    justify-content:center; /* keep grid centered */
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    justify-items: center;
   }
-  .cell{
-    width:32px; height:32px; display:flex; align-items:center; justify-content:center;
-    border:1px solid var(--line); color:#fff; text-transform:uppercase; font-weight:bold; user-select:none;
+  .team {
+    border: 2px solid #444;
+    border-radius: 15px;
+    padding: 15px;
+    width: 480px;
+    background: #1c1c1c;
+    box-shadow: 0 0 20px rgba(255, 152, 0, 0.2);
+    transition: transform 0.3s;
   }
-  .hit{ background:var(--accent); color:#fff; border-radius:50% }
-  .clues{ text-align:left; max-width:560px; margin:8px auto 0 }
-  .clue{ background:var(--muted); padding:6px 10px; border-radius:6px; margin:4px 0; border:1px solid #2c2c2c }
-  .found{ text-decoration:line-through; color:var(--accent) }
-  #results{ margin:18px auto; max-width:680px }
-  .hidden{ display:none }
-  .scores{font-weight:bold}
+  .team:hover { transform: scale(1.02); }
+  .team h2 {
+    color: #03a9f4;
+    margin-bottom: 5px;
+    text-shadow: 0 0 6px #03a9f4;
+  }
+  .timer {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #ff5252;
+    font-weight: bold;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 30px);
+    grid-template-rows: repeat(12, 30px);
+    gap: 2px;
+    margin: 10px auto;
+    user-select: none;
+  }
+  .cell {
+    width: 30px; height: 30px;
+    background: #222;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; border: 1px solid #333;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .cell:hover { background: #333; transform: scale(1.1); }
+  .selected { background: #ff9800 !important; color:#000; }
+  .found { background: #4caf50 !important; color:white; }
+  .questions {
+    text-align: left;
+    margin-top: 10px;
+  }
+  .questions div {
+    margin: 3px 0;
+    padding: 5px;
+    background: #2a2a2a;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: background 0.3s;
+  }
+  .questions div:hover { background:#3a3a3a; }
+  .done { text-decoration: line-through; color:#4caf50; font-weight: bold; }
+  .timeup {
+    color: #ff1744;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 8px;
+  }
+  .disabled .cell { pointer-events: none; opacity: 0.4; }
 </style>
 </head>
 <body>
-  <h1>⚡ DevOps Crossword – 4 Teams (Turn-Based) ⚡</h1>
-  <div class="topbar">
-    <div class="badge" id="turnBadge">Turn: Team 1</div>
-    <div class="badge scores" id="scoreBadge">Team 1: 0 | Team 2: 0 | Team 3: 0 | Team 4: 0</div>
-    <button id="finishBtn">🏁 Finish & Show Leaderboard</button>
-    <button id="skipBtn" title="Move to next team">⏭️ Skip Turn</button>
-  </div>
+<h1>⚡ DevOps Crossword Game ⚡</h1>
 
-  <div id="boards" class="boards"></div>
+<!-- Scoreboard -->
+<div id="scoreboard"></div>
 
-  <div id="results" class="hidden">
-    <h2>🏆 Leaderboard</h2>
-    <div id="finalScores"></div>
-  </div>
+<div class="container" id="gameContainer"></div>
 
 <script>
-/* --------------------------
-   Simple, Robust Turn-Based
-   4 independent crosswords
-   Click first cell, then last cell
-   (must be in straight line)
---------------------------- */
-
-const gridSize = 12;
-const TEAMS = 4;
-let currentTeam = 0;                      // 0..3
-const scores = [0,0,0,0];
-const foundByTeam = [new Set(), new Set(), new Set(), new Set()];
-const selectionStart = [null,null,null,null]; // per-team  {row,col} | null
-const grids = []; // per-team char[][]
-
-/* 4 distinct word-sets (answers uppercase) */
-const teamWords = [
-  [ // Team 1
-    { w:"DOCKER", q:"Tool for creating and running containers?" },
-    { w:"ANSIBLE", q:"Agentless configuration management tool?" },
-    { w:"PROMETHEUS", q:"Metrics scraping monitoring tool?" },
-    { w:"KUBERNETES", q:"Container orchestration system?" }
-  ],
-  [ // Team 2
-    { w:"JENKINS", q:"CI/CD automation server?" },
-    { w:"GRAFANA", q:"Visualization tool for dashboards?" },
-    { w:"VAULT", q:"Secrets manager by HashiCorp?" },
-    { w:"ARGOCD", q:"GitOps deployment tool for K8s?" }
-  ],
-  [ // Team 3
-    { w:"TERRAFORM", q:"Infrastructure as Code tool by HashiCorp?" },
-    { w:"HELM", q:"Kubernetes package manager?" },
-    { w:"NAGIOS", q:"Legacy monitoring/alerting system?" },
-    { w:"ISTIO", q:"Service mesh for Kubernetes?" }
-  ],
-  [ // Team 4
-    { w:"CLOUDFORMATION", q:"AWS IaC service?" },
-    { w:"EKS", q:"AWS managed Kubernetes service?" },
-    { w:"CLOUDWATCH", q:"AWS monitoring/logging service?" },
-    { w:"LAMBDA", q:"AWS serverless function compute?" }
-  ]
+const teamData = [
+  {
+    name:"Team 1",
+    words:["JENKINS","DOCKER","ANSIBLE","PROMETHEUS","KUBERNETES","GRAFANA","NAGIOS","ARGOCD","ELK","HELM"],
+    questions:[
+      "CI/CD automation tool?","Container runtime tool?","Popular config mgmt tool?","Monitoring system?",
+      "Container orchestration tool?","Visualization dashboard?","Legacy monitoring tool?",
+      "GitOps tool?","Log management stack?","Kubernetes package manager?"
+    ],
+    score:0
+  },
+  {
+    name:"Team 2",
+    words:["GIT","TERRAFORM","CIRCLECI","CHEF","PUPPET","SPINNAKER","NEWRELIC","DATADOG","FLUENTD","SALTSTACK"],
+    questions:[
+      "Version control system?","IaC tool by HashiCorp?","Another CI/CD tool?","Ruby-based config mgmt tool?",
+      "Declarative config mgmt tool?","Multi-cloud CD platform?","APM tool?",
+      "Cloud monitoring service?","Log forwarding agent?","Python-based config mgmt tool?"
+    ],
+    score:0
+  },
+  {
+    name:"Team 3",
+    words:["TERRAFORM","HELM","NAGIOS","ISTIO","SPINNAKER","CHEF","PUPPET","PROMETHEUS","DATADOG","LOGSTASH"],
+    questions:[
+      "IaC tool by HashiCorp?","Kubernetes package manager?","Legacy monitoring/alerting system?",
+      "Service mesh for Kubernetes?","Continuous delivery multi-cloud platform?","Ruby-based config mgmt tool?",
+      "Declarative config mgmt tool?","Open-source monitoring tool?","Observability stack vendor?","Log processing pipeline tool?"
+    ],
+    score:0
+  },
+  {
+    name:"Team 4",
+    words:["CLOUDFORMATION","EKS","CLOUDWATCH","LAMBDA","ATHENA","STEPFUNCTIONS","SNS","SQS","CODEPIPELINE","CODEBUILD"],
+    questions:[
+      "AWS IaC service?","AWS managed Kubernetes service?","AWS monitoring/logging service?","AWS serverless compute?",
+      "Query service for S3?","Serverless workflow orchestrator?","AWS pub/sub messaging?",
+      "AWS message queue service?","AWS CI/CD service?","AWS build service?"
+    ],
+    score:0
+  }
 ];
 
-/* ---------- Grid generation (reliable) ---------- */
-/* Finds all valid placements for word and picks one randomly */
-function placeWordIntoGrid(grid, word){
-  const W = word.toUpperCase();
-  const fits = [];
+// ---- Grid Generator ----
+function generateGrid(words, size=12){
+  let grid = Array.from({length:size},()=>Array(size).fill(null));
 
-  // Horizontal scans
-  for(let r=0;r<gridSize;r++){
-    for(let c=0;c<=gridSize - W.length;c++){
-      let ok = true;
-      for(let k=0;k<W.length;k++){
-        const v = grid[r][c+k];
-        if(v!=='' && v!==W[k]) { ok=false; break; }
+  function tryPlace(word){
+    word=word.toUpperCase();
+    for(let attempt=0;attempt<100;attempt++){
+      let dir=Math.random()<0.5?"H":"V";
+      let row=Math.floor(Math.random()*size);
+      let col=Math.floor(Math.random()*size);
+      if(dir==="H" && col+word.length<=size){
+        if(grid[row].slice(col,col+word.length).every(cell=>cell===null)){
+          for(let i=0;i<word.length;i++) grid[row][col+i]=word[i];
+          return true;
+        }
       }
-      if(ok) fits.push({dir:'H', r, c});
-    }
-  }
-  // Vertical scans
-  for(let c=0;c<gridSize;c++){
-    for(let r=0;r<=gridSize - W.length;r++){
-      let ok = true;
-      for(let k=0;k<W.length;k++){
-        const v = grid[r+k][c];
-        if(v!=='' && v!==W[k]) { ok=false; break; }
-      }
-      if(ok) fits.push({dir:'V', r, c});
-    }
-  }
-
-  if(fits.length===0) return false;
-
-  const pos = fits[Math.floor(Math.random()*fits.length)];
-  if(pos.dir==='H'){
-    for(let k=0;k<W.length;k++) grid[pos.r][pos.c+k]=W[k];
-  } else {
-    for(let k=0;k<W.length;k++) grid[pos.r+k][pos.c]=W[k];
-  }
-  return true;
-}
-
-function generateGridForTeam(words){
-  // Try multiple attempts to ensure a solvable grid
-  for(let attempt=0; attempt<30; attempt++){
-    const grid = Array.from({length:gridSize},()=>Array(gridSize).fill(''));
-    let ok = true;
-    for(const {w} of words){
-      if(!placeWordIntoGrid(grid, w)){ ok=false; break; }
-    }
-    if(!ok) continue;
-    // fill remaining with random letters
-    for(let r=0;r<gridSize;r++)
-      for(let c=0;c<gridSize;c++)
-        if(grid[r][c]==='') grid[r][c] = String.fromCharCode(65 + Math.floor(Math.random()*26));
-    return grid;
-  }
-  // Fallback: very unlikely to happen with our word sizes
-  alert("Could not generate grid; please reload.");
-  return Array.from({length:gridSize},()=>Array(gridSize).fill('X'));
-}
-
-/* ---------- Rendering ---------- */
-function el(tag, props={}, children=[]){
-  const e = document.createElement(tag);
-  Object.assign(e, props);
-  if(Array.isArray(children)) children.forEach(ch=>e.appendChild(ch));
-  return e;
-}
-
-function renderBoards(){
-  const wrap = document.getElementById('boards');
-  wrap.innerHTML = "";
-  for(let t=0;t<TEAMS;t++){
-    const panel = el('div', { className:'team', id:`team-${t}` });
-    if(t!==currentTeam) panel.classList.add('disabled'); else panel.classList.add('active');
-    panel.appendChild(el('h2', { textContent:`Team ${t+1}` }));
-
-    const grid = grids[t];
-    const board = el('div', { className:'crossword', id:`board-${t}` });
-
-    for(let r=0;r<gridSize;r++){
-      for(let c=0;c<gridSize;c++){
-        const cell = el('div', {
-          className:'cell',
-          textContent: grid[r][c]
-        });
-        cell.dataset.row = r; cell.dataset.col = c;
-
-        cell.addEventListener('click', () => onCellClick(t, r, c, cell));
-        board.appendChild(cell);
+      if(dir==="V" && row+word.length<=size){
+        let ok=true;
+        for(let i=0;i<word.length;i++) if(grid[row+i][col]!==null) ok=false;
+        if(ok){ for(let i=0;i<word.length;i++) grid[row+i][col]=word[i]; return true; }
       }
     }
-    panel.appendChild(board);
-
-    const clues = el('div', { className:'clues' });
-    teamWords[t].forEach((obj, i)=>{
-      const item = el('div', {
-        className:'clue',
-        id:`clue-${t}-${i}`,
-        textContent: obj.q
-      });
-      clues.appendChild(item);
-    });
-    panel.appendChild(clues);
-    wrap.appendChild(panel);
+    return false;
   }
-  updateBadges();
+
+  words.forEach(w=>tryPlace(w));
+  for(let r=0;r<size;r++)for(let c=0;c<size;c++) if(!grid[r][c]) grid[r][c]=String.fromCharCode(65+Math.floor(Math.random()*26));
+  return grid;
 }
 
-/* ---------- Selection & Checking ---------- */
-function onCellClick(teamIndex, row, col, cellEl){
-  if(teamIndex !== currentTeam) return;              // only active team can play
-
-  const start = selectionStart[teamIndex];
-  if(!start){
-    // first click
-    selectionStart[teamIndex] = {row, col};
-    cellEl.classList.add('hit'); // temp mark start
-    return;
-  }
-
-  // second click -> must be straight line
-  const sameRow = start.row === row;
-  const sameCol = start.col === col;
-  if(!sameRow && !sameCol){
-    clearTempHits(teamIndex);
-    selectionStart[teamIndex] = null;
-    nextTurn(); // invalid attempt still consumes turn (as requested earlier)
-    return;
-  }
-
-  // build path inclusive
-  const cells = [];
-  if(sameRow){
-    const c1 = Math.min(start.col, col), c2 = Math.max(start.col, col);
-    for(let c=c1;c<=c2;c++) cells.push({row, col:c});
-  } else {
-    const r1 = Math.min(start.row, row), r2 = Math.max(start.row, row);
-    for(let r=r1;r<=r2;r++) cells.push({row:r, col});
-  }
-
-  const letters = cells.map(p => grids[teamIndex][p.row][p.col]).join('');
-  const rev = letters.split('').reverse().join('');
-
-  const idx = teamWords[teamIndex].findIndex(x => x.w === letters || x.w === rev);
-  if(idx !== -1 && !foundByTeam[teamIndex].has(teamWords[teamIndex][idx].w)){
-    // mark success
-    foundByTeam[teamIndex].add(teamWords[teamIndex][idx].w);
-    scores[teamIndex] += 10;
-    // color cells
-    const board = document.getElementById(`board-${teamIndex}`);
-    cells.forEach(p=>{
-      const cell = board.querySelector(`.cell[data-row="${p.row}"][data-col="${p.col}"]`);
-      if(cell) cell.classList.add('hit');
-    });
-    // strike clue
-    const clueEl = document.getElementById(`clue-${teamIndex}-${idx}`);
-    if(clueEl) clueEl.classList.add('found');
-  } else {
-    // not a valid word
-    // flash the two clicked endpoints only
-    // (start is already .hit) -> briefly keep then clear
-    setTimeout(()=> clearTempHits(teamIndex), 120);
-  }
-
-  selectionStart[teamIndex] = null;
-  updateBadges();
-  nextTurn();
+// ---- Scoreboard ----
+function renderScoreboard(){
+  const sb=document.getElementById("scoreboard");
+  sb.innerHTML="";
+  teamData.forEach(t=>{
+    const div=document.createElement("div");
+    div.className="score";
+    div.id=`${t.name}-score`;
+    div.innerHTML=`${t.name}: <span>${t.score}</span>`;
+    sb.appendChild(div);
+  });
+}
+function updateScore(team){
+  team.score++;
+  document.querySelector(`#${team.name}-score span`).textContent=team.score;
 }
 
-function clearTempHits(teamIndex){
-  // remove only non-confirmed highlights (we tagged the start cell as .hit temporarily)
-  // but we cannot easily distinguish; simplest: keep confirmed by checking clues set.
-  // We'll just remove .hit then reapply for confirmed words:
-  const board = document.getElementById(`board-${teamIndex}`);
-  board.querySelectorAll('.cell.hit').forEach(c => c.classList.remove('hit'));
+// ---- Rendering ----
+function renderGame(){
+  renderScoreboard();
+  const container=document.getElementById("gameContainer");
+  teamData.forEach(team=>{
+    const div=document.createElement("div"); div.className="team";
+    div.innerHTML=`<h2>${team.name}</h2><div class="timer" id="${team.name}-timer">07:00</div>`;
+    let grid=generateGrid(team.words,12);
 
-  // re-mark confirmed words for that team
-  const confirmed = Array.from(foundByTeam[teamIndex]);
-  confirmed.forEach(word=>{
-    reapplyWordHighlight(board, grids[teamIndex], word);
+    const g=document.createElement("div"); g.className="grid";
+    grid.forEach((row,r)=>row.forEach((cell,c)=>{
+      let d=document.createElement("div"); 
+      d.className="cell"; d.textContent=cell; 
+      d.dataset.row=r; d.dataset.col=c; 
+      g.appendChild(d);
+    }));
+
+    const q=document.createElement("div"); q.className="questions";
+    team.questions.forEach((qst,i)=>{ q.innerHTML+=`<div id="${team.name}-q${i}">${i+1}. ${qst}</div>`; });
+
+    div.appendChild(g); div.appendChild(q); container.appendChild(div);
+
+    enableSelection(g,team,div);
+    startTimer(team.name,div);
   });
 }
 
-function reapplyWordHighlight(board, grid, word){
-  // scan board horizontally & vertically to find the placed word and re-mark
-  const W = word.toUpperCase();
-  // Horizontal
-  for(let r=0;r<gridSize;r++){
-    for(let c=0;c<=gridSize - W.length;c++){
-      let ok=true;
-      for(let k=0;k<W.length;k++){
-        if(grid[r][c+k] !== W[k]) { ok=false; break; }
-      }
-      if(ok){
-        for(let k=0;k<W.length;k++){
-          const cell = board.querySelector(`.cell[data-row="${r}"][data-col="${c+k}"]`);
-          if(cell) cell.classList.add('hit');
-        }
-        return;
-      }
+// ---- Word Selection Logic ----
+function enableSelection(gridEl, team, teamDiv){
+  let selecting=false, selectedCells=[];
+  gridEl.addEventListener("mousedown",e=>{
+    if(e.target.classList.contains("cell")){
+      selecting=true; selectedCells=[e.target]; e.target.classList.add("selected");
     }
-  }
-  // Vertical
-  for(let c=0;c<gridSize;c++){
-    for(let r=0;r<=gridSize - W.length;r++){
-      let ok=true;
-      for(let k=0;k<W.length;k++){
-        if(grid[r+k][c] !== W[k]) { ok=false; break; }
-      }
-      if(ok){
-        for(let k=0;k<W.length;k++){
-          const cell = board.querySelector(`.cell[data-row="${r+k}"][data-col="${c}"]`);
-          if(cell) cell.classList.add('hit');
-        }
-        return;
-      }
+  });
+  gridEl.addEventListener("mouseover",e=>{
+    if(selecting && e.target.classList.contains("cell") && !selectedCells.includes(e.target)){
+      selectedCells.push(e.target); e.target.classList.add("selected");
     }
-  }
+  });
+  window.addEventListener("mouseup",()=>{
+    if(selecting){
+      let word=selectedCells.map(c=>c.textContent).join("");
+      let rev=selectedCells.map(c=>c.textContent).reverse().join("");
+      if(team.words.includes(word)||team.words.includes(rev)){
+        selectedCells.forEach(c=>c.classList.add("found"));
+        let idx=team.words.indexOf(word);
+        if(idx===-1) idx=team.words.indexOf(rev);
+        if(idx>=0){ 
+          document.getElementById(`${team.name}-q${idx}`).classList.add("done"); 
+          updateScore(team);
+        }
+      }
+      selectedCells.forEach(c=>c.classList.remove("selected"));
+      selectedCells=[]; selecting=false;
+    }
+  });
 }
 
-/* ---------- Turn & UI ---------- */
-function nextTurn(){
-  document.getElementById(`team-${currentTeam}`).classList.remove('active');
-  document.getElementById(`team-${currentTeam}`).classList.add('disabled');
-
-  currentTeam = (currentTeam + 1) % TEAMS;
-
-  document.getElementById(`team-${currentTeam}`).classList.remove('disabled');
-  document.getElementById(`team-${currentTeam}`).classList.add('active');
-  updateBadges();
+// ---- Timer ----
+function startTimer(teamName, teamDiv){
+  let duration=7*60; // 7 minutes
+  const display=document.getElementById(`${teamName}-timer`);
+  const interval=setInterval(()=>{
+    let minutes=Math.floor(duration/60);
+    let seconds=duration%60;
+    display.textContent=`${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+    if(duration<=0){
+      clearInterval(interval);
+      teamDiv.classList.add("disabled");
+      display.textContent="⏳ Time's Up!";
+      display.classList.add("timeup");
+    }
+    duration--;
+  },1000);
 }
 
-function updateBadges(){
-  document.getElementById('turnBadge').textContent = `Turn: Team ${currentTeam+1}`;
-  const s = `Team 1: ${scores[0]} | Team 2: ${scores[1]} | Team 3: ${scores[2]} | Team 4: ${scores[3]}`;
-  document.getElementById('scoreBadge').textContent = s;
-}
-
-/* ---------- Finish ---------- */
-function showResults(){
-  const order = [0,1,2,3].map(i=>({team:`Team ${i+1}`, score:scores[i]})).sort((a,b)=>b.score-a.score);
-  const out = order.map((x,i)=> `${i===0?'🏆 ':''}${x.team}: ${x.score} pts`).join('<br>');
-  document.getElementById('finalScores').innerHTML = out;
-  document.getElementById('results').classList.remove('hidden');
-}
-
-/* ---------- Boot ---------- */
-for(let t=0;t<TEAMS;t++){
-  grids[t] = generateGridForTeam(teamWords[t]);
-}
-renderBoards();
-
-document.getElementById('finishBtn').addEventListener('click', showResults);
-document.getElementById('skipBtn').addEventListener('click', nextTurn);
+renderGame();
 </script>
 </body>
 </html>
